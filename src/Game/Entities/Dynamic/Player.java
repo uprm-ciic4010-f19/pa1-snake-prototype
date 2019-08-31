@@ -34,6 +34,8 @@ public class Player {
     }
 
     public void tick(){
+    	int x = xCoord;
+        int y = yCoord;
         moveCounter++;
         if(moveCounter>=5) {
             checkCollisionAndMove();
@@ -47,6 +49,8 @@ public class Player {
             direction="Left";
         }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT)){
             direction="Right";
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)){
+        	handler.getWorld().body.addFirst(new Tail(x, y,handler));
         }
 
     }
@@ -92,19 +96,18 @@ public class Player {
             Eat();
         }
 
-        if(!handler.getWorld().body.isEmpty()) {
+       if(!handler.getWorld().body.isEmpty()) {
             handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
             handler.getWorld().body.removeLast();
             handler.getWorld().body.addFirst(new Tail(x, y,handler));
         }
-
     }
 
     public void render(Graphics g,Boolean[][] playeLocation){
         Random r = new Random();
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-                g.setColor(Color.WHITE);
+                g.setColor(Color.green);
 
                 if(playeLocation[i][j]||handler.getWorld().appleLocation[i][j]){
                     g.fillRect((i*handler.getWorld().GridPixelsize),
@@ -119,7 +122,9 @@ public class Player {
 
     }
 
-    public void Eat(){
+    public void Eat() {
+    	System.out.println("ok");
+    	handler.getWorld().player.setJustAte(false);
         lenght++;
         Tail tail= null;
         handler.getWorld().appleLocation[xCoord][yCoord]=false;
@@ -225,6 +230,8 @@ public class Player {
         }
         handler.getWorld().body.addLast(tail);
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)){
+        	handler.getWorld().body.addLast(tail);}
     }
 
     public void kill(){
