@@ -19,7 +19,7 @@ public class GameState extends State {
         super(handler);
         world = new WorldOne(handler);
         handler.setWorld(world);
-        handler.getWorld().player= new Player(handler);
+        handler.getWorld().player = new Player(handler);
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 

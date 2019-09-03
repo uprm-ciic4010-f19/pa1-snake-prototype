@@ -115,7 +115,7 @@ public class GameSetUp implements Runnable {
         thread = new Thread(this);
         thread.start();
     }
-
+    
     public void run(){
 
         //initiallizes everything in order to run without breaking
@@ -128,7 +128,12 @@ public class GameSetUp implements Runnable {
         long lastTime = System.nanoTime();
         long timer = 0;
         int ticks = 0;
-
+        //System.out.println(handler.getWorld().player);
+//      if(handler.getWorld().player.justAte) {
+//      	fps += 9;
+//      	handler.getWorld().player.setJustAte(false);
+//      	System.out.println(fps);
+//      }
         while(running){
             //makes sure the games runs smoothly at 60 FPS
             now = System.nanoTime();
@@ -148,6 +153,12 @@ public class GameSetUp implements Runnable {
                 ticks = 0;
                 timer = 0;
             }
+            
+//            System.out.println(handler.getWorld().player);
+//            if(handler.getWorld().player.justAte) {
+//            	fps += 9;
+//            	handler.getWorld().player.setJustAte(false);
+//            }
         }
 
         stop();
