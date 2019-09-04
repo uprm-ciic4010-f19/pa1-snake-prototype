@@ -12,6 +12,8 @@ import java.util.Random;
 public class Player {
 	//score declared for keeping track of points of eating apples
 	public double score = 0;
+	//speed4Score is created to increase the snakes speed whenever she eats
+	public int speed4Score = 1;
     public int lenght;
     public boolean justAte;
     private Handler handler;
@@ -38,7 +40,10 @@ public class Player {
     	int x = xCoord;
         int y = yCoord;
         moveCounter++;
-        if(moveCounter>=5) {
+        //speedometer and speed4Score are variables created to increase the snakes speed
+        double speedometer = 55;
+        System.out.println(speedometer/(speed4Score*9));
+        if(moveCounter>=speedometer/(speed4Score*9)) {
             checkCollisionAndMove();
             moveCounter=0;
         }
@@ -133,6 +138,7 @@ public class Player {
     public void Eat() {
     	//score keeps track of the points earned from eating apples
     	score = score + Math.sqrt(2*score+1);
+    	speed4Score++;
     	handler.getWorld().player.setJustAte(false);
         lenght++;
         Tail tail= null;
