@@ -10,7 +10,8 @@ import java.util.Random;
  * Created by AlexVR on 7/2/2018.
  */
 public class Player {
-
+	//score declared for keeping track of points of eating apples
+	public double score = 0;
     public int lenght;
     public boolean justAte;
     private Handler handler;
@@ -32,7 +33,7 @@ public class Player {
         lenght= 1;
 
     }
-
+//Move counter changes speed
     public void tick(){
     	int x = xCoord;
         int y = yCoord;
@@ -49,7 +50,9 @@ public class Player {
             direction="Left";
         }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT)){
             direction="Right";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)){
+        }
+        //Pressing N adds 1 to the tail
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)){
         	handler.getWorld().body.addFirst(new Tail(x, y,handler));
         }
 
@@ -61,29 +64,34 @@ public class Player {
         int y = yCoord;
         switch (direction){
             case "Left":
+            	//changed the kill() to respective coordenates to make the snake teleport
                 if(xCoord==0){
-                    kill();
+                	xCoord = handler.getWorld().GridWidthHeightPixelCount-1;
+                    //kill();
                 }else{
                     xCoord--;
                 }
                 break;
             case "Right":
                 if(xCoord==handler.getWorld().GridWidthHeightPixelCount-1){
-                    kill();
+                	xCoord = 0;
+                    //kill();
                 }else{
                     xCoord++;
                 }
                 break;
             case "Up":
                 if(yCoord==0){
-                    kill();
+                	yCoord = handler.getWorld().GridWidthHeightPixelCount-1;
+                    //kill();
                 }else{
                     yCoord--;
                 }
                 break;
             case "Down":
                 if(yCoord==handler.getWorld().GridWidthHeightPixelCount-1){
-                    kill();
+                	yCoord = 0;
+                    //kill();
                 }else{
                     yCoord++;
                 }
@@ -123,7 +131,8 @@ public class Player {
     }
 
     public void Eat() {
-    	System.out.println("ok");
+    	//score keeps track of the points earned from eating apples
+    	score = score + Math.sqrt(2*score+1);
     	handler.getWorld().player.setJustAte(false);
         lenght++;
         Tail tail= null;

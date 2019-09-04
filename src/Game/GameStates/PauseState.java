@@ -6,6 +6,7 @@ import UI.UIImageButton;
 import UI.UIManager;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 /**
  * Created by AlexVR on 7/1/2018.
@@ -17,6 +18,7 @@ public class PauseState extends State {
 
     public PauseState(Handler handler) {
         super(handler);
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_ESCAPE)){
         uiManager = new UIManager(handler);
         handler.getMouseManager().setUimanager(uiManager);
 
@@ -34,7 +36,7 @@ public class PauseState extends State {
             handler.getMouseManager().setUimanager(null);
             State.setState(handler.getGame().menuState);
         }));
-
+        }
 
 
 
