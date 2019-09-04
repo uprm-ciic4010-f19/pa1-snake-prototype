@@ -60,6 +60,14 @@ public class Player {
         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)){
         	handler.getWorld().body.addFirst(new Tail(x, y,handler));
         }
+        //Here I make the snake speed down if - is pressed
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_MINUS) && speed4Score != 1){
+        	speed4Score--;
+        }
+        //Here I make the snake speed up if + or = is pressed. I putted = too since some laptops have the = sign as the same as the + and cant get the + unless you press shift + =.
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_PLUS) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_EQUALS)){
+        	speed4Score++;
+        }
 
     }
 
