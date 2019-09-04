@@ -53,6 +53,8 @@ public abstract class WorldBase {
 
     public void render(Graphics g){
 
+    	g.setColor(Color.white);
+    	g.drawString("score: " + player.score, 9, 50);
         for (int i = 0; i <= 800; i = i + GridPixelsize) {
 
             g.setColor(new Color(128, 0, 128));
