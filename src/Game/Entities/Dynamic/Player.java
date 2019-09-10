@@ -12,6 +12,7 @@ import java.util.Random;
 public class Player {
 	//score declared for keeping track of points of eating apples
 	public double score = 0;
+	public int score1 = (int) score;
 	//speed4Score is created to increase the snakes speed whenever she eats
 	public int speed4Score = 1;
     public int lenght;
@@ -42,6 +43,10 @@ public class Player {
         moveCounter++;
         //speedometer and speed4Score are variables created to increase the snakes speed
         double speedometer = 55;
+//        if(speedometer/(speed4Score*9)<0.5) {
+//        	speedometer = 1;
+////        	speed4Score = 2/9;
+//        }
         System.out.println(speedometer/(speed4Score*9));
         if(moveCounter>=speedometer/(speed4Score*9)) {
             checkCollisionAndMove();
@@ -129,14 +134,23 @@ public class Player {
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
                 g.setColor(Color.green);
-
-                if(playeLocation[i][j]||handler.getWorld().appleLocation[i][j]){
+                
+                //GIVES THE SHADE OF GREEN TO THE SNAKE
+                if(playeLocation[i][j]){
+                	g.setColor(Color.green);
                     g.fillRect((i*handler.getWorld().GridPixelsize),
                             (j*handler.getWorld().GridPixelsize),
                             handler.getWorld().GridPixelsize,
                             handler.getWorld().GridPixelsize);
                 }
-
+                //GIVES THE SHADE OF RED TO THE SNAKE
+                if(handler.getWorld().appleLocation[i][j]) {
+                	g.setColor(Color.red);
+                	   g.fillRect((i*handler.getWorld().GridPixelsize),
+                               (j*handler.getWorld().GridPixelsize),
+                               handler.getWorld().GridPixelsize,
+                               handler.getWorld().GridPixelsize);
+                }
             }
         }
 
@@ -146,6 +160,8 @@ public class Player {
     public void Eat() {
     	//score keeps track of the points earned from eating apples
     	score = score + Math.sqrt(2*score+1);
+    	score1 = (int) score;
+    	//System.out.println(score1);
     	speed4Score++;
     	handler.getWorld().player.setJustAte(false);
         lenght++;
