@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 
+import Game.GameStates.State;
+
 /**
  * Created by AlexVR on 7/2/2018.
  */
@@ -73,7 +75,12 @@ public class Player {
         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_PLUS) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_EQUALS)){
         	speed4Score++;
         }
-
+        //PAUSE state
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_ESCAPE)) {
+        	;
+        	State.setState(handler.getGame().pauseState);
+        	
+        }
     }
 
     public void checkCollisionAndMove(){
@@ -130,7 +137,12 @@ public class Player {
     }
 
     public void render(Graphics g,Boolean[][] playeLocation){
-        Random r = new Random();
+    	Random r = new Random();
+    	//Score on screen, size and color
+    	Font myFont = new Font ("Score: ", 1, 30);
+    	g.setFont(myFont);
+        g.setColor(Color.WHITE);
+        g.drawString("Score: " + this.score1, 0, 40);
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
                 g.setColor(Color.green);
