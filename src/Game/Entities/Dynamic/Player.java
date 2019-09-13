@@ -14,7 +14,7 @@ import Game.GameStates.State;
 public class Player {
 	//score declared for keeping track of points of eating apples
 	public double score = 0;
-	public int score1 = (int) score;
+	public float score1 = (int) score;
 	//speed4Score is created to increase the snakes speed whenever she eats
 	public int speed4Score = 1;
     public int lenght;
@@ -44,13 +44,14 @@ public class Player {
         int y = yCoord;
         moveCounter++;
         //speedometer and speed4Score are variables created to increase the snakes speed
-        double speedometer = 55;
+        double speedometer = 6;
 //        if(speedometer/(speed4Score*9)<0.5) {
 //        	speedometer = 1;
 ////        	speed4Score = 2/9;
+        System.out.println(speedometer-(speed4Score*0.09));
 //        }
-        System.out.println(speedometer/(speed4Score*9));
-        if(moveCounter>=speedometer/(speed4Score*9)) {
+//        System.out.println(speedometer/(speed4Score*9));
+        if(moveCounter>=speedometer-(speed4Score*0.09)) {
             checkCollisionAndMove();
             moveCounter=0;
         }
@@ -171,8 +172,9 @@ public class Player {
 
     public void Eat() {
     	//score keeps track of the points earned from eating apples
-    	score = score + Math.sqrt(2*score+1);
-    	score1 = (int) score;
+    	score = Math.sqrt(2*score+1);
+    	System.out.println(score);
+    	score1 = (float) score;
     	//System.out.println(score1);
     	speed4Score++;
     	handler.getWorld().player.setJustAte(false);
