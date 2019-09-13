@@ -48,7 +48,7 @@ public class Player {
 //        if(speedometer/(speed4Score*9)<0.5) {
 //        	speedometer = 1;
 ////        	speed4Score = 2/9;
-        System.out.println(speedometer-(speed4Score*0.09));
+        //System.out.println(speedometer-(speed4Score*0.09));
 //        }
 //        System.out.println(speedometer/(speed4Score*9));
         if(moveCounter>=speedometer-(speed4Score*0.09)) {
@@ -173,7 +173,7 @@ public class Player {
     public void Eat() {
     	//score keeps track of the points earned from eating apples
     	score = Math.sqrt(2*score+1);
-    	System.out.println(score);
+    	//System.out.println(score);
     	score1 = (float) score;
     	//System.out.println(score1);
     	speed4Score++;
