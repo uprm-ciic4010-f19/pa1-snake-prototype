@@ -18,27 +18,23 @@ public class PauseState extends State {
 
     public PauseState(Handler handler) {
         super(handler);
-        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_ESCAPE)){
+
         uiManager = new UIManager(handler);
         handler.getMouseManager().setUimanager(uiManager);
 
-        uiManager.addObjects(new UIImageButton(56, 223, 128, 64, Images.Resume, () -> {
+
+//RESUME BUTTON
+        uiManager.addObjects(new UIImageButton(600, 400, 128, 64, Images.Resume, () -> {
             handler.getMouseManager().setUimanager(null);
             State.setState(handler.getGame().gameState);
         }));
-
-        uiManager.addObjects(new UIImageButton(56, 223+(64+16), 128, 64, Images.Options, () -> {
-            handler.getMouseManager().setUimanager(null);
-            State.setState(handler.getGame().menuState);
+        
+        //RESTART BUTTON
+        uiManager.addObjects(new UIImageButton(600, 600, 128, 64, Images.replay, () -> {
+        	handler.getMouseManager().setUimanager(null);
+        	handler.getGame().reStart();
+          	State.setState(handler.getGame().gameState);
         }));
-
-        uiManager.addObjects(new UIImageButton(56, (223+(64+16))+(64+16), 128, 64, Images.BTitle, () -> {
-            handler.getMouseManager().setUimanager(null);
-            State.setState(handler.getGame().menuState);
-        }));
-        }
-
-
 
 
     }
@@ -62,7 +58,7 @@ public class PauseState extends State {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Images.Pause,0,0,800,600,null);
+        g.drawImage(Images.snakePause,0,0,handler.getWidth(),handler.getHeight(),null);
         uiManager.Render(g);
 
     }

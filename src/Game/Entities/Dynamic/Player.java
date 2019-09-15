@@ -18,6 +18,7 @@ public class Player {
 	//speed4Score is created to increase the snakes speed whenever she eats
 	public int speed4Score = 1;
     public int lenght;
+    public int time = 0;
     public boolean justAte;
     private Handler handler;
 
@@ -43,30 +44,38 @@ public class Player {
     	int x = xCoord;
         int y = yCoord;
         moveCounter++;
+        //counts before apple goes bad
+        time++;
+        System.out.println(time);
         //speedometer and speed4Score are variables created to increase the snakes speed
         double speedometer = 6;
-//        if(speedometer/(speed4Score*9)<0.5) {
-//        	speedometer = 1;
-////        	speed4Score = 2/9;
-        //System.out.println(speedometer-(speed4Score*0.09));
-//        }
-//        System.out.println(speedometer/(speed4Score*9));
+
         if(moveCounter>=speedometer-(speed4Score*0.09)) {
             checkCollisionAndMove();
             moveCounter=0;
         }
-        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP)){
+        // !direction at the end of the statements to prevent backtracking
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP) && direction != "Down"){
             direction="Up";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN)){
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN) && direction != "Up"){
             direction="Down";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT)){
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT) && direction != "Right"){
             direction="Left";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT)){
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT) && direction != "Left"){
             direction="Right";
         }
         //Pressing N adds 1 to the tail
         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)){
-        	handler.getWorld().body.addFirst(new Tail(x, y,handler));
+        	lenght++;
+        //	handler.getWorld().body.addFirst(new Tail(x, y,handler));
+        	handler.getWorld().body.addLast(new Tail(xCoord, yCoord, handler));
+        }
+        //By pressing M you can get rid of one lenght in tail
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_M)){
+        	lenght--;
+        	handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y]= false; 
+        //	handler.getWorld().body.addFirst(new Tail(x, y,handler));
+        	handler.getWorld().body.removeLast();
         }
         //Here I make the snake speed down if - is pressed
         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_MINUS) && speed4Score != 1){
@@ -78,10 +87,9 @@ public class Player {
         }
         //PAUSE state
         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_ESCAPE)) {
-        	;
         	State.setState(handler.getGame().pauseState);
-        	
         }
+        
     }
 
     public void checkCollisionAndMove(){
@@ -90,6 +98,8 @@ public class Player {
         int y = yCoord;
         switch (direction){
             case "Left":
+            	
+
             	//changed the kill() to respective coordenates to make the snake teleport
                 if(xCoord==0){
                 	xCoord = handler.getWorld().GridWidthHeightPixelCount-1;
@@ -98,7 +108,7 @@ public class Player {
                     xCoord--;
                 }
                 break;
-            case "Right":
+            case "Right":          
                 if(xCoord==handler.getWorld().GridWidthHeightPixelCount-1){
                 	xCoord = 0;
                     //kill();
@@ -115,6 +125,7 @@ public class Player {
                 }
                 break;
             case "Down":
+            	
                 if(yCoord==handler.getWorld().GridWidthHeightPixelCount-1){
                 	yCoord = 0;
                     //kill();
@@ -123,8 +134,15 @@ public class Player {
                 }
                 break;
         }
+        
         handler.getWorld().playerLocation[xCoord][yCoord]=true;
-
+        
+        for(int i = 0; i < handler.getWorld().body.size(); i++) {
+      	  if(((this.xCoord == handler.getWorld().body.get(i).x) && (this.yCoord == handler.getWorld().body.get(i).y))) {
+      		   kill();
+      		   State.setState(handler.getGame().gameOverState);
+      	   }
+      }
 
         if(handler.getWorld().appleLocation[xCoord][yCoord]){
             Eat();
@@ -135,6 +153,7 @@ public class Player {
             handler.getWorld().body.removeLast();
             handler.getWorld().body.addFirst(new Tail(x, y,handler));
         }
+
     }
 
     public void render(Graphics g,Boolean[][] playeLocation){
@@ -157,13 +176,30 @@ public class Player {
                             handler.getWorld().GridPixelsize);
                 }
                 //GIVES THE SHADE OF RED TO THE SNAKE
-                if(handler.getWorld().appleLocation[i][j]) {
+                if(handler.getWorld().appleLocation[i][j] && time < 400) {
                 	g.setColor(Color.red);
                 	   g.fillRect((i*handler.getWorld().GridPixelsize),
                                (j*handler.getWorld().GridPixelsize),
                                handler.getWorld().GridPixelsize,
                                handler.getWorld().GridPixelsize);
                 }
+                //When time variable reaches 400 the apple starts going bad
+                else if(handler.getWorld().appleLocation[i][j] && time >= 400 && handler.getWorld().appleLocation[i][j] && time < 800) {
+                	g.setColor(Color.orange);
+    				g.fillRect((i*handler.getWorld().GridPixelsize),
+                    (j*handler.getWorld().GridPixelsize),
+                    handler.getWorld().GridPixelsize,
+                    handler.getWorld().GridPixelsize);
+    	}
+                //when Time variable reaches 800 the apple goes bad
+            else if(handler.getWorld().appleLocation[i][j] && time >= 800){
+            			
+            				g.setColor(Color.GRAY);
+            				g.fillRect((i*handler.getWorld().GridPixelsize),
+                            (j*handler.getWorld().GridPixelsize),
+                            handler.getWorld().GridPixelsize,
+                            handler.getWorld().GridPixelsize);
+            	}
             }
         }
 
@@ -171,15 +207,34 @@ public class Player {
     }
 
     public void Eat() {
-    	//score keeps track of the points earned from eating apples
-    	score = Math.sqrt(2*score+1);
-    	//System.out.println(score);
-    	score1 = (float) score;
-    	//System.out.println(score1);
-    	speed4Score++;
-    	handler.getWorld().player.setJustAte(false);
+    	
+    	handler.getWorld().player.setJustAte(false);   	
+    	//score keeps track of the points earned from eating apples 
+    	//Here is the bad apple code. If he eats after time is over 800 he will loss a tail
+    	if(time >= 800) {
+    		handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y]= false; 
+            handler.getWorld().body.removeLast();
+            
+            //score is being taken off
+            	score -= Math.sqrt(2*score+1); 
+            	score1 = (float) score;
+        	lenght --;
+        	
+        	handler.getWorld().appleLocation[xCoord][yCoord]=false;
+            handler.getWorld().appleOnBoard=false;
+        	
+        }
+    	
+    	//Here is bussiness as usual if he eats a good apple
+    	else if(time < 800){
         lenght++;
+    	score = Math.sqrt(2*score+1); 
+    	score1 = (float) score;
+    	
+    	
+   
         Tail tail= null;
+
         handler.getWorld().appleLocation[xCoord][yCoord]=false;
         handler.getWorld().appleOnBoard=false;
         switch (direction){
@@ -194,7 +249,9 @@ public class Player {
                             tail =new Tail(this.xCoord,this.yCoord+1,handler);
                         }
                     }
-                }else{
+                }
+
+                else{
                     if(handler.getWorld().body.getLast().x!=handler.getWorld().GridWidthHeightPixelCount-1){
                         tail=new Tail(handler.getWorld().body.getLast().x+1,this.yCoord,handler);
                     }else{
@@ -284,7 +341,14 @@ public class Player {
         handler.getWorld().body.addLast(tail);
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
         if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)){
-        	handler.getWorld().body.addLast(tail);}
+        	handler.getWorld().body.addLast(tail);}}
+    	speed4Score++;
+    	time = 0;
+    	//if the score is less than 0 the user will lose.
+    	if(score1 < 0) {
+    		kill();
+   		   State.setState(handler.getGame().gameOverState);
+    	}
     }
 
     public void kill(){
@@ -305,4 +369,5 @@ public class Player {
     public void setJustAte(boolean justAte) {
         this.justAte = justAte;
     }
+
 }
