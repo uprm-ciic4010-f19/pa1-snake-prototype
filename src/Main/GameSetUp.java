@@ -1,20 +1,26 @@
 package Main;
 
-import Display.DisplayScreen;
-import Game.GameStates.GameState;
-import Game.GameStates.MenuState;
-import Game.GameStates.PauseState;
-import Game.GameStates.State;
-import Input.KeyManager;
-import Input.MouseManager;
-import Resources.Images;
-
-import javax.sound.sampled.*;
-import java.awt.*;
+import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
+import Display.DisplayScreen;
+import Game.GameStates.GameOverState;
+import Game.GameStates.GameState;
+import Game.GameStates.State;
+import Input.KeyManager;
+import Input.MouseManager;
+import Resources.Images;
 
 
 /**
@@ -45,6 +51,7 @@ public class GameSetUp implements Runnable {
     public State gameState;
     public State menuState;
     public State pauseState;
+    public State gameOverState;
 
     //Res.music
     private InputStream audioFile;
@@ -79,8 +86,9 @@ public class GameSetUp implements Runnable {
         handler = new Handler(this);
 
         gameState = new GameState(handler);
-        menuState = new MenuState(handler);
-        pauseState = new PauseState(handler);
+        menuState = new Game.GameStates.MenuState(handler);
+        pauseState = new Game.GameStates.PauseState(handler);
+        gameOverState = new GameOverState(handler);
 
         State.setState(menuState);
 
@@ -115,7 +123,7 @@ public class GameSetUp implements Runnable {
         thread = new Thread(this);
         thread.start();
     }
-    
+   
     public void run(){
 
         //initiallizes everything in order to run without breaking
@@ -148,7 +156,7 @@ public class GameSetUp implements Runnable {
                 ticks = 0;
                 timer = 0;
             }
-            
+           
         }
 
         stop();
@@ -213,4 +221,3 @@ public class GameSetUp implements Runnable {
         return height;
     }
 }
-

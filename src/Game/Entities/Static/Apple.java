@@ -17,5 +17,12 @@ public class Apple {
         this.xCoord=x;
         this.yCoord=y;
     }
-
+    public boolean isGood() {
+    	if(handler.getWorld().player.moveCounter > 100) {
+    		return false;
+    	}
+    	else {
+    		return true;
+    	}
+    }
 }
